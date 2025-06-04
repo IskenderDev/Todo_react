@@ -6,20 +6,20 @@ import { useState } from 'react';
 
 export function Header({ onAddTask }) {
 
-    const [title, setTitle] = useState('')
+    const [text, setText] = useState('')
 
     function handleSubmit(event) {
         event.preventDefault()
-        if (title == '') {
+        if (text == '') {
             return null;
         } else {
-            onAddTask(title)
-            setTitle('')
+            onAddTask(text)
+            setText('')
         }
     }
 
     function onChangeTitle(event) {
-        setTitle(event.target.value)
+        setText(event.target.value)
     }
 
     return (
@@ -27,7 +27,7 @@ export function Header({ onAddTask }) {
             <img src={todo} alt="" />
 
             <form onSubmit={handleSubmit} className={styles.newTaskForm}>
-                <input type="text" placeholder='Add a New Task' value={title} onChange={onChangeTitle} />
+                <input type="text" placeholder='Add a New Task' value={text} onChange={onChangeTitle} />
                 <button>
                     Create
                     <AiOutlinePlusCircle size={22} />

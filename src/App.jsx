@@ -2,52 +2,67 @@ import { useEffect, useState } from "react";
 import { Header } from "./components/header";
 import { Tasks } from "./components/tasks";
 
-const LOCAL_STORAGE_KEY = "todo:savedTasks"
+const API_URL = "https://65f019aada8c6584131ac3e0.mockapi.io/Todo/Stalin/Todo";
 
 function App() {
 
   const [tasks, setTasks] = useState([])
 
-  function loadSavedTasks() {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (saved) {
-      setTasks(JSON.parse(saved))
+  async function loadTasks() {
+    try {
+      const response = await fetch(API_URL)
+      const data = await response.json()
+      setTasks(data)
+    } catch (e) {
+      console.error("Failed to load tasks", e)
     }
   }
 
   useEffect(() => {
-    loadSavedTasks()
+    loadTasks()
   }, [])
 
-  function setTaskAndSave(newTasks) {
-    setTasks(newTasks)
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newTasks))
+  async function addTask(taskText) {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: taskText, isCompleted: false })
+      })
+      const newTask = await response.json()
+      setTasks((prev) => [...prev, newTask])
+    } catch (e) {
+      console.error("Failed to add task", e)
+    }
   }
 
-  function addTask(taskTitle) {
-    setTaskAndSave([
-      ...tasks,
-      {
-        id: crypto.randomUUID(),
-        title: taskTitle,
-        isCompleted: false
-      }
-    ])
+  async function toggleTaskCompletedById(taskId) {
+    const taskToToggle = tasks.find((task) => task.id === taskId)
+    if (!taskToToggle) return
+    const updated = {
+      ...taskToToggle,
+      isCompleted: !taskToToggle.isCompleted
+    }
+    try {
+      const response = await fetch(`${API_URL}/${taskId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated)
+      })
+      const updatedTask = await response.json()
+      setTasks((prev) => prev.map((t) => (t.id === taskId ? updatedTask : t)))
+    } catch (e) {
+      console.error("Failed to update task", e)
+    }
   }
 
-  function toggleTaskCompletedById(taskId) {
-    const newTasks = tasks.map(task => {
-      if (task.id === taskId) {
-        return { ...task, isCompleted: !task.isCompleted }
-      }
-      return task
-    })
-    setTaskAndSave(newTasks)
-  }
-
-  function deleteTaskById(taskId) {
-    const newTasks = tasks.filter(task => task.id != taskId)
-    setTaskAndSave(newTasks)
+  async function deleteTaskById(taskId) {
+    try {
+      await fetch(`${API_URL}/${taskId}`, { method: "DELETE" })
+      setTasks((prev) => prev.filter((task) => task.id !== taskId))
+    } catch (e) {
+      console.error("Failed to delete task", e)
+    }
   }
 
   return (

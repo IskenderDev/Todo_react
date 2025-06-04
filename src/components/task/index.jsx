@@ -8,7 +8,7 @@ export function Task({ task, onComplete, onDelete }) {
             <button className={styles.checkContainer} onClick={() => onComplete(task.id)}>
                 {task.isCompleted ? <AiFillCheckCircle /> : < div />}
             </button>
-            <p className={task.isCompleted ? styles.taskCompleted : ""}>{task.title}</p>
+            <p className={task.isCompleted ? styles.taskCompleted : ""}>{task.text}</p>
             <button className={styles.delBtn} onClick={() => onDelete(task.id)}>
                 <AiFillDelete size={28} />
             </button>

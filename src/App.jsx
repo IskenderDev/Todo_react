@@ -99,8 +99,7 @@ function App() {
 
   return (
     <>
-      <button onClick={handleLogout}>Logout</button>
-      <Header onAddTask={addTask} />
+      <Header onAddTask={addTask} userName={user.name} onLogout={handleLogout} />
       <Tasks
         tasks={tasks}
         onComplete={toggleTaskCompletedById}

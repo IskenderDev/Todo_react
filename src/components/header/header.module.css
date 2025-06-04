@@ -10,6 +10,31 @@
     z-index: 2;
 }
 
+.userArea {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.logoutBtn {
+    background: #444444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.4rem 1rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
 .newTaskForm {
     position: absolute;
     bottom: -2.7rem;

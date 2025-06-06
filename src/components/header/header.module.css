@@ -61,6 +61,10 @@
     font-size: 1.6rem;
 }
 
+.groupInput {
+    max-width: 20rem;
+}
+
 .newTaskForm input:focus {
     outline: none;
 }

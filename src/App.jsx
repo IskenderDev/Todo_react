@@ -30,12 +30,12 @@ function App() {
     }
   }, [user]);
 
-  async function addTask(taskText) {
+  async function addTask(taskText, group) {
     try {
       const response = await fetch(TASKS_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: taskText, isCompleted: false })
+        body: JSON.stringify({ text: taskText, isCompleted: false, group })
       });
       const newTask = await response.json();
       setTasks((prev) => [...prev, newTask]);
